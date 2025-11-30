@@ -1,0 +1,190 @@
+name: islamic_quiz
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.5
+  flutter_svg: ^2.0.10+1
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/json/
+    - assets/json/icons/
+    - assets/json/tafseer/al-faatihah/
+    - assets/json/tafseer/al-baqarah/
+    - assets/json/tafseer/aali-imraan/
+    - assets/json/tafseer/an-nisaa/
+    - assets/json/tafseer/al-maaidah/
+    - assets/json/tafseer/al-anaam/
+    - assets/json/tafseer/al-araaf/
+    - assets/json/tafseer/al-anfaal/
+    - assets/json/tafseer/at-tawbah/
+    - assets/json/tafseer/yoonus/
+    - assets/json/tafseer/hood/
+    - assets/json/tafseer/yoosuf/
+    - assets/json/tafseer/ar-rad/
+    - assets/json/tafseer/ibraheem/
+    - assets/json/tafseer/al-hijr/
+    - assets/json/tafseer/an-nahl/
+    - assets/json/tafseer/al-isra/
+    - assets/json/tafseer/al-kahf/
+    - assets/json/tafseer/maryam/
+    - assets/json/tafseer/taahaa/
+    - assets/json/tafseer/al-anbiya/
+    - assets/json/tafseer/al-hajj/
+    - assets/json/tafseer/al-muminun/
+    - assets/json/tafseer/an-nur/
+    - assets/json/tafseer/al-furqan/
+    - assets/json/tafseer/ash-shuara/
+    - assets/json/tafseer/an-naml/
+    - assets/json/tafseer/al-qasas/
+    - assets/json/tafseer/al-ankabut/
+    - assets/json/tafseer/ar-rum/
+    - assets/json/tafseer/luqman/
+    - assets/json/tafseer/as-sajdah/
+    - assets/json/tafseer/al-ahzab/
+    - assets/json/tafseer/saba/
+    - assets/json/tafseer/fatir/
+    - assets/json/tafseer/Yasin/
+    - assets/json/tafseer/as-Saffat/
+    - assets/json/tafseer/sad/
+    - assets/json/tafseer/az-Zumar/
+    - assets/json/tafseer/Ghafir/
+    - assets/json/akida/e-anbya/
+    - assets/json/akida/e-book/
+    - assets/json/akida/e-kader/
+    - assets/json/akida/e-mlaeka/
+    - assets/json/akida/e-nawagid/
+    - assets/json/akida/eman/
+    - assets/json/akida/shirk/
+    - assets/json/akida/t-name/
+    - assets/json/akida/t-olhia/
+    - assets/json/akida/t-rab/
+    - assets/json/akida/akhir/
+    - assets/json/akida/sonah/
+    - assets/json/akida/bida/
+    - assets/json/hadith/hadith01/
+    - assets/json/hadith/hadith02/
+    - assets/json/hadith/hadith03/
+    - assets/json/hadith/hadith04/
+    - assets/json/hadith/hadith05/
+    - assets/json/hadith/hadith06/
+    - assets/json/hadith/hadith07/
+    - assets/json/figh/tahara/
+    - assets/json/figh/salah/
+    - assets/json/figh/zakah/
+    - assets/json/figh/siam/
+    - assets/json/figh/hajj/
+    - assets/json/figh/figh-zina/
+    - assets/json/figh/figh-atema/
+    - assets/json/figh/figh-said/
+    - assets/json/figh/figh-nikah/
+    - assets/json/figh/figh-talag/
+    - assets/json/figh/figh-iela/
+    - assets/json/figh/ridaa/
+    - assets/json/figh/idah/
+    - assets/json/figh/e-nozor/
+    - assets/json/figh/wagf/
+    - assets/json/figh/wasaya/
+    - assets/json/figh/hibat/
+    - assets/json/history/sirah/
+    - assets/json/history/kholfa/
+    - assets/json/history/abasi/
+    - assets/json/history/amwi/
+    - assets/json/history/osmany/
+    - assets/json/history/mamalik/
+    - assets/json/history/moasir/
+    - assets/json/arabia/al-nhw/
+    - assets/json/arabia/al-srf/
+    - assets/json/arabia/horoof/
+    - assets/json/arabia/al-blaga/
+    - assets/json/arabia/fiqh-allgh/
+    - assets/json/arabia/al-logh/
+    - assets/json/arabia/al-imla/
+    - assets/json/arabia/al-insha/
+    - assets/json/arabia/al-majm/
+    - assets/json/arabia/al-mstlhat/
+    - assets/json/arabia/al-tareeb/
+    - assets/json/arabia/trajm/
+    - assets/json/arabia/al-adab/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package
