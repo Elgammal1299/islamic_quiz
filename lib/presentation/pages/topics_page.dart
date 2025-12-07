@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/theme/theme_extensions.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/topic_model.dart';
 import '../../data/datasources/quiz_local_datasource.dart';
@@ -28,7 +29,6 @@ class TopicsPage extends StatelessWidget {
         ),
       )..loadTopics(category.path),
       child: Scaffold(
-        backgroundColor: AppColors.background,
         appBar: AppBar(
           title: Text(
             category.arabicName,
@@ -47,9 +47,9 @@ class TopicsPage extends StatelessWidget {
         body: BlocBuilder<TopicsCubit, TopicsState>(
           builder: (context, state) {
             if (state is TopicsLoading) {
-              return const Center(
+              return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primary,
+                  color: context.primaryColor,
                 ),
               );
             }
@@ -70,7 +70,7 @@ class TopicsPage extends StatelessWidget {
                       style: GoogleFonts.cairo(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: context.textColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -80,7 +80,7 @@ class TopicsPage extends StatelessWidget {
                         state.message,
                         style: GoogleFonts.cairo(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: context.secondaryTextColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -152,7 +152,7 @@ class TopicsPage extends StatelessWidget {
                             style: GoogleFonts.cairo(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: context.textColor,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -161,7 +161,7 @@ class TopicsPage extends StatelessWidget {
                             style: GoogleFonts.cairo(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.textSecondary,
+                              color: context.textColor,
                             ),
                           ),
                         ],
@@ -211,133 +211,118 @@ class _TopicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+
     return Card(
-      elevation: 4,
-      shadowColor: Colors.black.withValues(alpha: 0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.white,
-              AppColors.primary.withValues(alpha: 0.02),
-            ],
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Topic header
-              Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${index + 1}',
-                        style: GoogleFonts.cairo(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Topic header
+            Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: context.primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: isDark
+                        ? []
+                        : [
+                            BoxShadow(
+                              color: context.primaryColor.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${index + 1}',
+                      style: GoogleFonts.cairo(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? AppColors.darkBackground : Colors.white,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          topic.arabicName,
-                          style: GoogleFonts.cairo(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                            height: 1.4,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        topic.arabicName,
+                        style: GoogleFonts.cairo(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: context.textColor,
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.quiz_outlined,
+                            size: 16,
+                            color: context.secondaryTextColor,
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.quiz_outlined,
-                              size: 16,
-                              color: AppColors.textSecondary,
+                          const SizedBox(width: 4),
+                          Text(
+                            '3 مستويات',
+                            style: GoogleFonts.cairo(
+                              fontSize: 13,
+                              color: context.secondaryTextColor,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '3 مستويات',
-                              style: GoogleFonts.cairo(
-                                fontSize: 13,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
 
-              const SizedBox(height: 20),
-
-              // Level buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: _LevelButton(
-                      level: 1,
-                      label: AppStrings.level1,
-                      icon: Icons.looks_one_rounded,
-                      color: const Color(0xFF4CAF50),
-                      onTap: () => _navigateToQuiz(context, topic, 1),
-                    ),
+            // Level buttons
+            Row(
+              children: [
+                Expanded(
+                  child: _LevelButton(
+                    level: 1,
+                    label: AppStrings.level1,
+                    icon: Icons.looks_one_rounded,
+                    color: const Color(0xFF4CAF50),
+                    onTap: () => _navigateToQuiz(context, topic, 1),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _LevelButton(
-                      level: 2,
-                      label: AppStrings.level2,
-                      icon: Icons.looks_two_rounded,
-                      color: const Color(0xFFFFA726),
-                      onTap: () => _navigateToQuiz(context, topic, 2),
-                    ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _LevelButton(
+                    level: 2,
+                    label: AppStrings.level2,
+                    icon: Icons.looks_two_rounded,
+                    color: const Color(0xFFFFA726),
+                    onTap: () => _navigateToQuiz(context, topic, 2),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _LevelButton(
-                      level: 3,
-                      label: AppStrings.level3,
-                      icon: Icons.looks_3_rounded,
-                      color: const Color(0xFFEF5350),
-                      onTap: () => _navigateToQuiz(context, topic, 3),
-                    ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _LevelButton(
+                    level: 3,
+                    label: AppStrings.level3,
+                    icon: Icons.looks_3_rounded,
+                    color: const Color(0xFFEF5350),
+                    onTap: () => _navigateToQuiz(context, topic, 3),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

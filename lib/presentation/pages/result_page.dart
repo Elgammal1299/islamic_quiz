@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/theme/theme_extensions.dart';
 import '../../data/models/question_model.dart';
 
 class ResultPage extends StatelessWidget {
@@ -27,10 +28,8 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final incorrectAnswers = totalQuestions - correctAnswers;
-    final bool isPassed = scorePercentage >= 60;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           AppStrings.results,
@@ -230,15 +229,23 @@ class ResultPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                border: context.isDarkMode
+                    ? Border.all(
+                        color: context.dividerColor,
+                        width: 1,
+                      )
+                    : null,
+                boxShadow: context.isDarkMode
+                    ? []
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +266,7 @@ class ResultPage extends StatelessWidget {
                         style: GoogleFonts.cairo(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: context.textColor,
                         ),
                       ),
                     ],
@@ -295,18 +302,20 @@ class ResultPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
-                    icon: const Icon(Icons.home, color: Colors.white),
+                    icon: Icon(
+                      Icons.home,
+                      color: context.isDarkMode ? AppColors.darkBackground : Colors.white,
+                    ),
                     label: Text(
                       AppStrings.backToHome,
                       style: GoogleFonts.cairo(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: context.isDarkMode ? AppColors.darkBackground : Colors.white,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -320,18 +329,20 @@ class ResultPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(Icons.replay, color: AppColors.primary),
+                    icon: Icon(
+                      Icons.replay,
+                      color: context.primaryColor,
+                    ),
                     label: Text(
                       AppStrings.tryAgain,
                       style: GoogleFonts.cairo(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                        color: context.primaryColor,
                       ),
                     ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      side: const BorderSide(color: AppColors.primary, width: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -368,16 +379,21 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(
+          color: color.withValues(alpha: context.isDarkMode ? 0.4 : 0.2),
+          width: 2,
+        ),
+        boxShadow: context.isDarkMode
+            ? []
+            : [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         children: [
@@ -400,7 +416,7 @@ class _StatCard extends StatelessWidget {
             label,
             style: GoogleFonts.cairo(
               fontSize: 14,
-              color: AppColors.textSecondary,
+              color: context.secondaryTextColor,
             ),
           ),
           const SizedBox(height: 4),
@@ -442,17 +458,22 @@ class _QuestionReviewCard extends StatelessWidget {
     final correctAnswerIndex = question.answers.indexWhere((answer) => answer.isCorrect == 1);
     final isCorrect = userAnswerIndex == correctAnswerIndex;
 
+    final bgAlpha = context.isDarkMode ? 0.1 : 0.05;
+    final borderAlpha = context.isDarkMode ? 0.5 : 0.3;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isCorrect
-            ? AppColors.correct.withValues(alpha: 0.05)
-            : AppColors.incorrect.withValues(alpha: 0.05),
+        color: context.isDarkMode
+            ? context.cardColor
+            : (isCorrect
+                ? AppColors.correct.withValues(alpha: bgAlpha)
+                : AppColors.incorrect.withValues(alpha: bgAlpha)),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isCorrect
-              ? AppColors.correct.withValues(alpha: 0.3)
-              : AppColors.incorrect.withValues(alpha: 0.3),
+              ? AppColors.correct.withValues(alpha: borderAlpha)
+              : AppColors.incorrect.withValues(alpha: borderAlpha),
           width: 2,
         ),
       ),
@@ -487,7 +508,7 @@ class _QuestionReviewCard extends StatelessWidget {
                   style: GoogleFonts.cairo(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: context.textColor,
                     height: 1.6,
                   ),
                 ),
@@ -524,9 +545,11 @@ class _QuestionReviewCard extends StatelessWidget {
               textColor = AppColors.incorrect;
               icon = Icons.cancel;
             } else {
-              backgroundColor = Colors.grey.withValues(alpha: 0.05);
-              borderColor = Colors.grey.withValues(alpha: 0.2);
-              textColor = AppColors.textSecondary;
+              backgroundColor = context.isDarkMode
+                  ? AppColors.darkCardBackground
+                  : Colors.grey.withValues(alpha: 0.05);
+              borderColor = context.dividerColor;
+              textColor = context.secondaryTextColor;
             }
 
             return Padding(
@@ -562,7 +585,7 @@ class _QuestionReviewCard extends StatelessWidget {
                               : FontWeight.normal,
                           color: (isCorrectAnswer || isUserAnswer)
                               ? textColor
-                              : AppColors.textPrimary,
+                              : context.textColor,
                           height: 1.6,
                         ),
                       ),

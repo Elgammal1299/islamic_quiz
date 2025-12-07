@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/theme/theme_extensions.dart';
 import '../cubit/categories/categories_cubit.dart';
 import '../cubit/categories/categories_state.dart';
 import '../widgets/category_card.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'topics_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,7 +16,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           AppStrings.appTitle,
@@ -24,6 +25,10 @@ class HomePage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: const [
+          ThemeToggleButton(),
+          SizedBox(width: 8),
+        ],
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: AppColors.primaryGradient,
@@ -33,9 +38,9 @@ class HomePage extends StatelessWidget {
       body: BlocBuilder<CategoriesCubit, CategoriesState>(
         builder: (context, state) {
           if (state is CategoriesLoading) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(
-                color: AppColors.primary,
+                color: context.primaryColor,
               ),
             );
           }
@@ -56,7 +61,7 @@ class HomePage extends StatelessWidget {
                     style: GoogleFonts.cairo(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: context.textColor,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -66,7 +71,7 @@ class HomePage extends StatelessWidget {
                       state.message,
                       style: GoogleFonts.cairo(
                         fontSize: 14,
-                        color: AppColors.textSecondary,
+                        color: context.secondaryTextColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -85,21 +90,23 @@ class HomePage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardColor,
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      boxShadow: context.isDarkMode
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                     ),
                     child: Text(
                       state.mainData.description,
                       style: GoogleFonts.cairo(
                         fontSize: 16,
-                        color: AppColors.textSecondary,
+                        color: context.secondaryTextColor,
                         height: 1.8,
                       ),
                       textAlign: TextAlign.center,
@@ -111,7 +118,7 @@ class HomePage extends StatelessWidget {
                     style: GoogleFonts.cairo(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: context.textColor,
                     ),
                   ),
                   const SizedBox(height: 16),

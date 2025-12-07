@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/theme/theme_extensions.dart';
 import '../../data/models/category_model.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -11,17 +12,26 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            gradient: AppColors.primaryGradient,
+            borderRadius: BorderRadius.circular(16),
+            gradient: isDark
+                ? LinearGradient(
+                    colors: [
+                      AppColors.primaryLight.withValues(alpha: 0.3),
+                      AppColors.primary.withValues(alpha: 0.2),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : AppColors.primaryGradient,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -30,7 +40,9 @@ class CategoryCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark
+                      ? AppColors.darkCardBackground
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: _buildIcon(),
@@ -39,10 +51,12 @@ class CategoryCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   category.arabicName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : Colors.white,
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
@@ -54,7 +68,12 @@ class CategoryCard extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   category.description,
-                  style: const TextStyle(fontSize: 11, color: Colors.white70),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : Colors.white70,
+                  ),
                   textAlign: TextAlign.center,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,

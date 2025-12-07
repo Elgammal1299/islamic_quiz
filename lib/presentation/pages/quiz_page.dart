@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/theme/theme_extensions.dart';
 import '../../data/datasources/quiz_local_datasource.dart';
 import '../../data/repositories/quiz_repository_impl.dart';
 import '../cubit/quiz/quiz_cubit.dart';
@@ -50,7 +51,6 @@ class QuizPage extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: AppColors.background,
             appBar: AppBar(
               title: Text(
                 topicName,
@@ -75,9 +75,9 @@ class QuizPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, QuizState state) {
     if (state is QuizLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
-          color: AppColors.primary,
+          color: context.primaryColor,
         ),
       );
     }
@@ -98,7 +98,7 @@ class QuizPage extends StatelessWidget {
               style: GoogleFonts.cairo(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: context.textColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -108,7 +108,7 @@ class QuizPage extends StatelessWidget {
                 state.message,
                 style: GoogleFonts.cairo(
                   fontSize: 14,
-                  color: AppColors.textSecondary,
+                  color: context.secondaryTextColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -127,7 +127,7 @@ class QuizPage extends StatelessWidget {
           // Progress Bar
           Container(
             padding: const EdgeInsets.all(16),
-            color: Colors.white,
+            color: context.cardColor,
             child: Column(
               children: [
                 Row(
@@ -138,7 +138,7 @@ class QuizPage extends StatelessWidget {
                       style: GoogleFonts.cairo(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: context.textColor,
                       ),
                     ),
                     Container(
@@ -161,8 +161,8 @@ class QuizPage extends StatelessWidget {
                 const SizedBox(height: 12),
                 LinearProgressIndicator(
                   value: (state.currentQuestionIndex + 1) / state.questions.length,
-                  backgroundColor: AppColors.divider,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  backgroundColor: context.dividerColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(context.primaryColor),
                   minHeight: 8,
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -179,14 +179,19 @@ class QuizPage extends StatelessWidget {
                 children: [
                   // Question Card
                   Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        gradient: AppColors.primaryGradient,
+                        gradient: context.isDarkMode
+                            ? LinearGradient(
+                                colors: [
+                                  AppColors.primaryLight.withValues(alpha: 0.4),
+                                  AppColors.primary.withValues(alpha: 0.3),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              )
+                            : AppColors.primaryGradient,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
@@ -194,7 +199,9 @@ class QuizPage extends StatelessWidget {
                         style: GoogleFonts.cairo(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: context.isDarkMode
+                              ? AppColors.darkTextPrimary
+                              : Colors.white,
                           height: 1.8,
                         ),
                         textAlign: TextAlign.center,
@@ -231,14 +238,24 @@ class QuizPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -4),
-                ),
-              ],
+              color: context.cardColor,
+              border: context.isDarkMode
+                  ? Border(
+                      top: BorderSide(
+                        color: context.dividerColor,
+                        width: 1,
+                      ),
+                    )
+                  : null,
+              boxShadow: context.isDarkMode
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, -4),
+                      ),
+                    ],
             ),
             child: Row(
               children: [
@@ -280,8 +297,7 @@ class QuizPage extends StatelessWidget {
                         : null,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: AppColors.primary,
-                      disabledBackgroundColor: AppColors.divider,
+                      disabledBackgroundColor: context.dividerColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -322,26 +338,32 @@ class _AnswerOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+    final selectedColor = isDark ? AppColors.primaryLight : AppColors.primary;
+    final unselectedColor = context.cardColor;
+    final borderColor = isSelected ? selectedColor : context.dividerColor;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white,
+          color: isSelected ? selectedColor : unselectedColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.divider,
+            color: borderColor,
             width: 2,
           ),
-          boxShadow: [
-            if (isSelected)
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-          ],
+          boxShadow: isSelected && !isDark
+              ? [
+                  BoxShadow(
+                    color: selectedColor.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : [],
         ),
         child: Row(
           children: [
@@ -350,17 +372,21 @@ class _AnswerOption extends StatelessWidget {
               height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected ? Colors.white : Colors.transparent,
+                color: isSelected
+                    ? (isDark ? AppColors.darkBackground : Colors.white)
+                    : Colors.transparent,
                 border: Border.all(
-                  color: isSelected ? Colors.white : AppColors.divider,
+                  color: isSelected
+                      ? (isDark ? AppColors.darkBackground : Colors.white)
+                      : context.dividerColor,
                   width: 2,
                 ),
               ),
               child: isSelected
-                  ? const Icon(
+                  ? Icon(
                       Icons.check,
                       size: 16,
-                      color: AppColors.primary,
+                      color: selectedColor,
                     )
                   : null,
             ),
@@ -371,7 +397,9 @@ class _AnswerOption extends StatelessWidget {
                 style: GoogleFonts.cairo(
                   fontSize: 16,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? Colors.white : AppColors.textPrimary,
+                  color: isSelected
+                      ? (isDark ? AppColors.darkBackground : Colors.white)
+                      : context.textColor,
                   height: 1.6,
                 ),
               ),
