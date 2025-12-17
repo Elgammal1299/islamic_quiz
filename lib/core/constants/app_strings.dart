@@ -20,4 +20,18 @@ class AppStrings {
   static const String of = 'من';
   static const String loading = 'جاري التحميل...';
   static const String error = 'حدث خطأ';
+
+  // Drawer
+  static const String settings = 'الإعدادات';
+  static const String theme = 'المظهر';
+  static const String lightMode = 'الوضع النهاري';
+  static const String darkMode = 'الوضع الليلي';
+  static const String systemMode = 'وضع النظام';
+  static const String aboutApp = 'عن التطبيق';
+  static const String aboutUs = 'من نحن';
+  static const String contactUs = 'تواصل معنا';
+  static const String whatsapp = 'واتساب';
+  static const String telegram = 'تيليجرام';
+  static const String appDescription = 'تطبيق اختبارات إسلامية شاملة يحتوي على أسئلة متنوعة في مختلف المجالات الإسلامية من تفسير وحديث وفقه وعقيدة وتاريخ.';
+  static const String version = 'الإصدار';
 }

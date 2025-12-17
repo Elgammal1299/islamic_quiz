@@ -6,8 +6,8 @@ import '../../core/constants/app_strings.dart';
 import '../../core/theme/theme_extensions.dart';
 import '../cubit/categories/categories_cubit.dart';
 import '../cubit/categories/categories_state.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/category_card.dart';
-import '../widgets/theme_toggle_button.dart';
 import 'topics_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: Text(
           AppStrings.appTitle,
@@ -25,10 +26,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        actions: const [
-          ThemeToggleButton(),
-          SizedBox(width: 8),
-        ],
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: AppColors.primaryGradient,
