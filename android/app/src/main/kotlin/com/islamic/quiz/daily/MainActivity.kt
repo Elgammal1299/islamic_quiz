@@ -1,4 +1,4 @@
-package com.islamicquiz.app
+package com.islamic.quiz.daily
 
 import io.flutter.embedding.android.FlutterActivity
 
